@@ -29,7 +29,7 @@ end)
             for _, bond in pairs(bondsFolder:GetChildren()) do
                 if bond:IsA("BasePart") then -- Teleport to each bond with delay
                     humanoidRootPart.CFrame = bond.CFrame
-                    wait(0.6) -- Delay between teleports
+                    wait(0.5) -- Delay between teleports
                 end
             end
         else
