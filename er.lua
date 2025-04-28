@@ -28,7 +28,7 @@ end)
         if humanoidRootPart then
             for _, bond in pairs(bondsFolder:GetChildren()) do
                 if bond:IsA("BasePart") then -- Teleport to each bond with delay
-                    humanoidRootPart.CFrame = bond.CFrame
+                    humanoidRootPart.CFrame = CFrame.new(bond.Position + Vector3.new(0, 5, 0))
                     wait(0.5) -- Delay between teleports
                 end
             end
@@ -37,5 +37,31 @@ end)
         end
     else
         warn("No bonds found in Workspace.RuntimeItems.Bond")
+    end
+end)
+
+
+-- Bond collection (delayed by 25 seconds)
+task.spawn(function()
+    task.wait(3) -- Wait 25 seconds before starting bond collection
+
+    while true do
+        task.wait(0.3) -- Check every 0.3 seconds
+
+        local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") -- Define hrp here
+        local items = game.Workspace:WaitForChild("RuntimeItems")
+            
+        for _, bond in pairs(items:GetChildren()) do
+            if bond:IsA("Model") and bond.Name == "Bond" and bond.PrimaryPart then
+                local dist = (bond.PrimaryPart.Position - hrp.Position).Magnitude
+                if dist < 100 then
+                    local rem = game.ReplicatedStorage.Packages.RemotePromise.Remotes.C_ActivateObject
+                    rem:FireServer(bond) -- Activate the object
+                    print("Bond collected:", bond.Name)
+                end
+            else
+                warn("PrimaryPart missing or object name mismatch for Bond!")
+            end
+        end
     end
 end)
