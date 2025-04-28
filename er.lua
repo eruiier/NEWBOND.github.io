@@ -3,6 +3,21 @@ task.spawn(function()
     wait(9) -- Introduces a delay of 9 seconds
     loadScript()
 
+task.spawn(function()
+    wait(20) -- Wait 20 seconds before starting
+    
+    while true do
+        local args = {
+            [1] = false
+        }
+
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EndDecision"):FireServer(unpack(args))
+        
+        wait(3) -- Wait 3 seconds before repeating
+    end
+end)
+
+        
     -- Find the Bond folder
     local bondsFolder = game.Workspace:FindFirstChild("RuntimeItems") and game.Workspace.RuntimeItems:FindFirstChild("Bond")
     if bondsFolder then
